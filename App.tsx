@@ -1,8 +1,10 @@
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import useCounterStore from './useCounterStore'
-import useUserStore from './useUserStore'
+import useCounterStore from './stores/useCounterStore'
+import useUserStore from './stores/useUserStore'
+import useTodoStore from './stores/useToDoStore'
+import { useEffect } from 'react'
 
 function App() {
   
@@ -10,7 +12,15 @@ function App() {
   const increase = useCounterStore((state:any) => state.increase)
     const login = useUserStore((state:any) => state.login);
     const user = useUserStore((state:any) => state.user);
-    
+    const todos = useTodoStore((state:any) => state.todos);
+    const loading = useTodoStore((state:any) => state.loading);
+    const fetchTodos = useTodoStore((state:any) => state.fetchTodos);
+
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
   if (loading) return <p>Loading...</p>;
 
   return (
@@ -30,6 +40,9 @@ function App() {
           count is {count}
         </button>
         <button onClick={() => login({ name: "Manoj" })}>Login</button>
+         <ul>
+            {todos.map(t => <li key={t.id}>{t.title}</li>)}
+        </ul>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
